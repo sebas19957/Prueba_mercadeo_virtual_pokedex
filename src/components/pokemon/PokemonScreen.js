@@ -25,7 +25,7 @@ export const PokemonScreen = () => {
             <h1 
                 style={ { fontFamily: 'Pokemon-font, cursive'} }
             >
-                Pokemons
+                Pokémons
             </h1>
             <hr className="mt-4" />
             <div className="card-columns animate__animated animate__fadeIn">

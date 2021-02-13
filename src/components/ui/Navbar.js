@@ -10,7 +10,7 @@ export const Navbar = () => {
                 style={ { fontFamily: 'Pokemon-font, cursive'} } 
                 to="/pokemon"
             >
-                Pokemones
+                Pokémon
             </Link>
 
             <div className="navbar-collapse">

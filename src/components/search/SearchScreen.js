@@ -26,7 +26,7 @@ export const SearchScreen = () => {
 
     return (
         <div>
-            <h1 style={ { fontFamily: 'Pokemon-font, cursive'} }>Search Pokemon</h1>
+            <h1 style={ { fontFamily: 'Pokemon-font, cursive'} }>Search Pokémon</h1>
             <hr />
             
             <div className="row">
@@ -34,7 +34,7 @@ export const SearchScreen = () => {
                     <form onSubmit={ handleSearch }>
                         <input 
                             type="text"
-                            placeholder="Find your pokemon"
+                            placeholder="Find your pokémon"
                             className="form-control"
                             name="searchText"
                             autoComplete="off"
