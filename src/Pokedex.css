@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Pokemon-font';
+    src: url('./fonts/Solid.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+*{
+    /* font-family: 'Pokemon-font', cursive; */
+    font-family: 'Merienda One', cursive;
+}
