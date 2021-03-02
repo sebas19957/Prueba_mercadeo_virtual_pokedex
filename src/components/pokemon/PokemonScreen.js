@@ -1,44 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { getAllPokemon, getPokemon } from '../selectors/getPokemonByUrl';
+import { getPokemon } from '../selectors/getPokemonByUrl';
+import { getAllPokemon } from '../selectors/getAllPokemon';
 import { CardScreen } from './CardScreen';
 
 export const PokemonScreen = () => {
 
-   const [pokemons, setpokemons] = useState([]);
+    const [pokemonData, setPokemonData] = useState([]);
+    const [nextUrl, setNextUrl] = useState('');
+    const [prevUrl, setPrevUrl] = useState('');
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        const data = getAllPokemon('https://pokeapi.co/api/v2/pokemon?offset=0&limit=102');
-        data.then(res => {
-            dataPokemon(res.results);
-        })
+        async function fetchData() {
+            const response = await getAllPokemon('https://pokeapi.co/api/v2/pokemon')
+            setNextUrl(response.next);
+            setPrevUrl(response.previous);
+            await loadPokemon(response.results);
+            setLoading(false);
+        }
+        fetchData();
     }, []);
 
-    const dataPokemon = async (data) => {
+    const next = async () => {
+        setLoading(true);
+        const data = await getAllPokemon(nextUrl);
+        await loadPokemon(data.results);
+        setNextUrl(data.next);
+        setPrevUrl(data.previous);
+        setLoading(false);
+    }
+    
+      const prev = async () => {
+        if (!prevUrl) return;
+        setLoading(true);
+        const data = await getAllPokemon(prevUrl);
+        await loadPokemon(data.results);
+        setNextUrl(data.next);
+        setPrevUrl(data.previous);
+        setLoading(false);
+    }
+
+    const loadPokemon = async (data) => {
         const dataPokemon = await Promise.all(data.map(async pokemon => {
-            const getPokeon = await getPokemon(pokemon)
-            return getPokeon;
-          }));
-          setpokemons(dataPokemon);
+            const pokemonRecord = await getPokemon(pokemon)
+            return pokemonRecord
+        }));
+        setPokemonData(dataPokemon);
+    }
+
+
+    if (loading) {
+        return (
+            <div>
+                <h1 style={{ fontFamily: 'Pokemon-font, cursive' }}>
+                    Pokémons
+                </h1>
+                <hr className="mt-4" />
+                <div style={{textAlign: 'center'}}>
+                    <button  className="btn btn-primary mr-2 mb-3 mt-1" onClick={prev}>Prev</button>
+                    <button className="btn btn-primary mb-3 mt-1" onClick={next}>Next</button>
+                </div>
+                <div className="alert alert-info">
+                    Loading Pokemons...
+                </div>
+            </div>
+        )
     }
 
     return (
         <div>
-            <h1 
-                style={ { fontFamily: 'Pokemon-font, cursive'} }
+            <h1
+                style={{ fontFamily: 'Pokemon-font, cursive' }}
             >
                 Pokémons
             </h1>
             <hr className="mt-4" />
+
+            <div style={{textAlign: 'center'}}>
+                <button  className="btn btn-primary mr-2 mb-3 mt-1" onClick={prev}>Prev</button>
+                <button className="btn btn-primary mb-3 mt-1" onClick={next}>Next</button>
+            </div>
+
             <div className="card-columns animate__animated animate__fadeIn">
                 {
-                    pokemons.map( (pokemon, i)  => (
-                        <CardScreen 
-                            key={i}
+                    pokemonData.map(pokemon => (
+                        <CardScreen
+                            key={pokemon.id}
                             pokemon={pokemon}
                         />
                     ))
                 }
             </div>
-            
+
+            <div style={{textAlign: 'center'}}>
+                <button  className="btn btn-primary mr-2 mb-3 mt-1" onClick={prev}>Prev</button>
+                <button className="btn btn-primary mb-3 mt-1" onClick={next}>Next</button>
+            </div>
         </div>
+    
     )
 }
