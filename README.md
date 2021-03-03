@@ -5,3 +5,4 @@ Entrenadores Pokémon llevan consigo para registrar las fichas de todas las dive
 con las que se encuentran durante su viaje como entrenadores.
 
 #### Realizado por Sebastian Mosquera Valencia
+
